@@ -8,5 +8,11 @@ async function hashPassword(password) {
 }
 // função que verifica se a senha está correta
 async function verifyPassword(password, hash) {
-    return (0, bcryptjs_1.compare)(password, hash);
+    try {
+        return await (0, bcryptjs_1.compare)(password, hash);
+    }
+    catch (error) {
+        console.error("Error comparing password:", error);
+        return false;
+    }
 }
