@@ -14,7 +14,7 @@ export function login (app: FastifyInstance){
         const { email, password } = loginPhysicsPioneerSchema.parse(request.body);
 
         const physicsPioneer = await prisma.physicsPioneer.findUnique({
-            where: email
+            where: { email: email }
         });
 
         if(!physicsPioneer){
@@ -26,7 +26,7 @@ export function login (app: FastifyInstance){
 
         if(!correctPass){
             return response.status(400).send({
-                message: "Invalid password"
+                message: "Invalid password",
             });
         }
         const token = app.jwt.sign({
