@@ -18,3 +18,4 @@ app.register(fastify_jwt_1.default, {
 app.listen({
     port: 3333
 }).then(() => console.log("Server is running! 🚀"));
+//# sourceMappingURL=server.js.map
