@@ -22,20 +22,30 @@ function createPhysicsPioneer(app) {
     });
     const id = (0, uuid_1.v4)();
     app.post("/create-physics-pioneer", (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const { name, email, password } = createPhysicsPioneerSchema.parse(request.body);
-        const physicsPioneerFound = yield prisma_1.prisma.physicsPioneer.findUnique({
-            where: { email }
-        });
-        if (physicsPioneerFound) {
-            return response.status(400).send({ message: "This physics pioneer already exists! Try another one 😄" });
-        }
-        const hashedPassword = yield (0, hash_1.hashPassword)(password);
-        const physicsPioneer = yield prisma_1.prisma.physicsPioneer.create({
-            data: {
-                id, name, email, password: hashedPassword
+        try {
+            const { name, email, password } = createPhysicsPioneerSchema.parse(request.body);
+            const physicsPioneerFound = yield prisma_1.prisma.physicsPioneer.findUnique({
+                where: { email }
+            });
+            if (physicsPioneerFound) {
+                return response.status(400).send({ message: "This physics pioneer already exists! Try another one 😄" });
             }
-        });
-        return response.status(200).send(physicsPioneer);
+            const hashedPassword = yield (0, hash_1.hashPassword)(password);
+            const physicsPioneer = yield prisma_1.prisma.physicsPioneer.create({
+                data: {
+                    id, name, email, password: hashedPassword
+                }
+            });
+            return response.status(200).send(physicsPioneer);
+        }
+        catch (error) {
+            const errorResponse = {
+                error: true,
+                message: "Invalid input data. Please check your fields.",
+                details: error.errors || error.message // Detalhes do erro, caso existam
+            };
+            return response.status(400).send(errorResponse);
+        }
     }));
 }
 //# sourceMappingURL=create-physics-pioneer.js.map
